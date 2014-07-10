@@ -16,8 +16,8 @@ var grid_demo = {
     numBoxes: 0,
 
     /**
-     * Get coordinates that reside within the grid 
-     * - 
+     * Get coordinates that reside within the grid
+     * -
      *
      * @param double coord
      * @param boolean isX
@@ -36,10 +36,10 @@ var grid_demo = {
             var valid = coord;
         return values[this.get_nearest_coord(valid, isX)];
     },
-    
+
     /**
      * Handle mouse down events
-     * 
+     *
      * @param event
      */
     start_new_box: function(event){
@@ -96,7 +96,7 @@ var grid_demo = {
             // calc width and height from corners
             var width = swX - neX;
             var height = swY - neY;
-            
+
             domNew.css({
                 'width': width,
                 'height': height,
@@ -140,7 +140,7 @@ var grid_demo = {
         grid_demo.domContainer.on('mouseup', finish_new_box);
 
         /**
-         * If the mouse leaves the outer container, we will stop 
+         * If the mouse leaves the outer container, we will stop
          * creation of the box at the final coordinates
          */
         grid_demo.domContainer.on('mouseleave', finish_new_box);
@@ -151,7 +151,7 @@ var grid_demo = {
      * Generate rmq code for building a box on the grid
      *
      * @param domBox
-     * 
+     *
      * @return string
      */
     get_rmq_code: function(domBox){
@@ -209,7 +209,7 @@ var grid_demo = {
         return closest;
     },
 
-        
+
     /**
      * Given a midpoint, find the relevant grid box edge
      *
@@ -276,7 +276,7 @@ var grid_demo = {
         domTable.appendTo(this.domContainer);
         return domTable;
     },
-    
+
     /**
      * Function initializes the grid demo
      *
@@ -291,11 +291,11 @@ var grid_demo = {
 
         // set grid size restrictions
         var domFirstCell = this.domGrid.find('.grid_cell').first();
-        this.cellWidth = domFirstCell.outerWidth() - 
-            parseInt(domFirstCell.css('border-left-width')) / 2 - 
+        this.cellWidth = domFirstCell.outerWidth() -
+            parseInt(domFirstCell.css('border-left-width')) / 2 -
             parseInt(domFirstCell.css('border-right-width')) / 2;
-        this.cellHeight = domFirstCell.outerHeight() - 
-            parseInt(domFirstCell.css('border-top-width')) / 2 - 
+        this.cellHeight = domFirstCell.outerHeight() -
+            parseInt(domFirstCell.css('border-top-width')) / 2 -
             parseInt(domFirstCell.css('border-bottom-width')) / 2;
 
         // these help handle calculations getting thrown off by collapsed borders
@@ -328,5 +328,6 @@ var grid_demo = {
 
 $(document).ready(function(){
     grid_demo.init_grid($('#demo_grid'), $('.grid_builder').first(), $('#demo_code'));
+    $(document).tooltip();
 });
 
