@@ -47,7 +47,7 @@ var grid_demo = {
 
         // increment box count (mainly for color styling)
         grid_demo.numBoxes++;
-        var colorClass = 'bg_' + (grid_demo.numBoxes % 3);
+        var colorClass = 'bg_' + (grid_demo.numBoxes % 4);
 
         var click_x = grid_demo.get_valid_midpoint(event.pageX, true);
         var click_y = grid_demo.get_valid_midpoint(event.pageY, false);
