@@ -139,7 +139,7 @@ var grid_demo = {
     var attempt_delete = function(event){
       $( "#dialog-confirm" ).dialog({
       resizable: false,
-      height:200,
+      height:260,
       modal: true,
       buttons: {
         "Yes": function() {
