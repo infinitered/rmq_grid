@@ -132,7 +132,27 @@ var grid_demo = {
             // get the code text itself
             var code = grid_demo.get_rmq_code(domNew);
             domCodeBox.text(code).attr('title', code);
-        }
+            domCodeBox.click({frame: code, sister: domNew}, attempt_delete);
+            //domCodeBox.on('click', attempt_delete)
+        };
+
+        var attempt_delete = function(event){
+          $( "#dialog-confirm" ).dialog({
+            resizable: false,
+            height:200,
+            modal: true,
+            buttons: {
+              "Yes": function() {
+                $(event.target).fadeOut();
+                $(event.data.sister).fadeOut();
+                $( this ).dialog( "close" );
+              },
+              Cancel: function() {
+                $( this ).dialog( "close" );
+              }
+            }
+          }).html("<p>Are you sure you would like to remove <em>" + event.data.frame + "</em>?</p>");
+        };
 
         /**
          * Releasing mouse triggers completion of new box
