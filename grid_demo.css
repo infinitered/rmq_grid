@@ -1,60 +1,60 @@
 .grid_builder{
-    font-size: 18px;
-    text-align: center;
-    font-family: monospace;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: default;
-    border-collapse: collapse;
+  font-size: 18px;
+  text-align: center;
+  font-family: monospace;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+  border-collapse: collapse;
 }
 
 .grid_label{
-    color: #BABABA;
-    font-weight: bold;
-    border-right: 16px solid #FFF;
-    border-bottom: 16px solid #FFF;
+  color: #BABABA;
+  font-weight: bold;
+  border-right: 16px solid #FFF;
+  border-bottom: 16px solid #FFF;
 }
 .grid_cell{
-    color: #000;
-    font-weight: bold;
-    background-color: #E4E4E4;
-    border: 16px solid #FFF;
-    width: 34px;
-    height: 56px;
+  color: #000;
+  font-weight: bold;
+  background-color: #E4E4E4;
+  border: 16px solid #FFF;
+  width: 34px;
+  height: 56px;
 }
 .layout_item{
-    position: absolute;
-    border: 2px solid #BABABA;
-    cursor: default;
-    opacity: 0.6;
+  position: absolute;
+  border: 2px solid #BABABA;
+  cursor: default;
+  opacity: 0.6;
 }
 .layout_code{
-    position: absolute;
-    border: 2px solid #BABABA;
-    padding: 8px;
-    font-family: monospace;
-    overflow: hidden;
+  position: absolute;
+  border: 2px solid #BABABA;
+  padding: 8px;
+  font-family: monospace;
+  overflow: hidden;
 }
 .bg_0{
-    background-color: #F9FEDE;
+  background-color: #F9FEDE;
 }
 .bg_1{
-    background-color: #FFD7DE;
+  background-color: #FFD7DE;
 }
 .bg_2{
-    background-color: #D7FEEA;
+  background-color: #D7FEEA;
 }
 .bg_3{
-    background-color: #BEF3FF;
+  background-color: #BEF3FF;
 }
 .grid_container{
-    width: 584px;
-    padding: 40px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
-    float: left;
+  width: 584px;
+  padding: 40px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
 }
