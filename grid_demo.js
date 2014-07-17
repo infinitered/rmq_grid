@@ -132,27 +132,41 @@ var grid_demo = {
       // get the code text itself
       var code = grid_demo.get_rmq_code(domNew);
       domCodeBox.text(code).attr('title', code);
-      domCodeBox.click({frame: code, sister: domNew}, attempt_delete);
-      //domCodeBox.on('click', attempt_delete)
+
+      // clicked and timer are here to handle double click events
+      domCodeBox.data({'clicked': false, 'timer': null, 'sister': domNew});
+      domCodeBox.on('click', dispatch_codebox_clicks);
     };
 
-    var attempt_delete = function(event){
-      $( "#dialog-confirm" ).dialog({
-      resizable: false,
-      height:260,
-      modal: true,
-      buttons: {
-        "Yes": function() {
-        $(event.target).fadeOut();
-        $(event.data.sister).fadeOut();
-        $( this ).dialog( "close" );
-        },
-        Cancel: function() {
-        $( this ).dialog( "close" );
-        }
+    /**
+     * Monitor clicks on a codebox and dispatch separate click / dblclick events
+     */
+    var dispatch_codebox_clicks = function(){
+      var element = $(this);
+      var isClicked = element.data('clicked');
+
+      // double click successful
+      if(isClicked){
+        // clear out double click logic
+        clearTimeout(element.data('timer'));
+        element.data({'timer': null, 'clicked': false});
+
+        console.log('double clicked');
+        //delete_box(element);
       }
-      }).html("<p>Are you sure you would like to remove <em>" + event.data.frame + "</em>?</p>");
-    };
+
+      // single click
+      else{
+        element.data({
+          'clicked':  true,
+          'timer': setTimeout(function(){
+            element.data('clicked', false);
+            console.log('single clicked');
+          }, 250)
+        });
+      }
+      return false;
+    }
 
     /**
      * Releasing mouse triggers completion of new box
