@@ -151,6 +151,16 @@ var grid_demo = {
         clearTimeout(element.data('timer'));
         element.data({'timer': null, 'clicked': false});
 
+        // don't forget to clear annoying browser text selection
+        if(window.getSelection){
+            if(window.getSelection().empty)
+              window.getSelection().empty();
+            else if(window.getSelection().removeAllRanges)
+              window.getSelection.removeAllRanges();
+        }
+        else if(document.selection)
+            document.selection.empty();
+
         delete_box(element);
       }
 
