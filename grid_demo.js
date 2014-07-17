@@ -151,8 +151,7 @@ var grid_demo = {
         clearTimeout(element.data('timer'));
         element.data({'timer': null, 'clicked': false});
 
-        console.log('double clicked');
-        //delete_box(element);
+        delete_box(element);
       }
 
       // single click
@@ -161,11 +160,23 @@ var grid_demo = {
           'clicked':  true,
           'timer': setTimeout(function(){
             element.data('clicked', false);
-            console.log('single clicked');
+            // dispatch single click events here
           }, 250)
         });
       }
       return false;
+    }
+
+    /**
+     * Remove a box and its sister element
+     *
+     * @param domBox
+     */
+    var delete_box = function(domBox){
+      var domSister = domBox.data('sister'); 
+      if(domSister)
+        domSister.fadeOut();
+      domBox.fadeOut();
     }
 
     /**
