@@ -38,6 +38,26 @@ var grid_demo = {
   },
 
   /**
+   * Set the background image of the grids to user upload
+   *
+   * @param input
+   */
+  set_bg_image: function(input){
+    if(input.files && input.files[0]){
+      var reader = new FileReader();
+      reader.onload = function(event){
+        console.log(event);
+        var file = event.target.result;
+        if(file.match(/^data:image\//)){
+          console.log($('.grid_container'));
+          $('.grid_container').css('background-image', 'url(' + event.target.result + ')');
+        }
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  },
+
+  /**
    * Handle mouse down events
    *
    * @param event
@@ -378,6 +398,9 @@ var grid_demo = {
 
     // start listeners
     this.domContainer.mousedown(this.start_new_box);
+    $('#bg_upload').on('change', function(){
+      grid_demo.set_bg_image(this);
+    });
   }
 }
 
