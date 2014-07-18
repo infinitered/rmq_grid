@@ -190,12 +190,34 @@ var grid_demo = {
           'clicked':  true,
           'timer': setTimeout(function(){
             element.data('clicked', false);
-            // dispatch single click events here
+            attempt_delete(element);
           }, 250)
         });
       }
       return false;
     }
+
+    /**
+     * Delete with confirmation prompt
+     * 
+     * @param domElement
+     */
+    var attempt_delete = function(element){
+      $( "#dialog-confirm" ).dialog({
+      resizable: false,
+      height:260,
+      modal: true,
+      buttons: {
+        "Yes": function() {
+          delete_box(element);
+          $( this ).dialog( "close" );
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+      }).html("<p>Are you sure you would like to remove <em>" + element[0].innerHTML + "</em>?</p>");
+    };
 
     /**
      * Remove a box and its sister element
