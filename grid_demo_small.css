@@ -9,22 +9,53 @@
   cursor: default;
   border-collapse: collapse;
 }
+.grid_row{
+  margin-bottom: 10px;
+}
 
+.grid_label_top{
+  height: 20px;
+  width: 26px;
+  margin-right: 10px;
+  text-align: center;
+}
+.grid_label_left{
+  height: 40px;
+  width: 20px;
+  text-align: right;
+  padding: 12px 6px 0 0;
+}
+.grid_label_corner{
+  height: 20px;
+  width: 20px;
+}
 .grid_label{
+  vertical-align: top;
   color: #BABABA;
   font-weight: bold;
-  padding: 0;
   font-size: 14px;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .grid_cell{
   color: #000;
   font-weight: bold;
   background-color: #E4E4E4;
-  border-style: solid;
-  border-color: #FFF;
-  border-width: 10px;
-  padding: 2px;
-  height: 44px;
+  width: 26px;
+  height: 40px;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+  padding-top: 10px;
+  margin-right: 10px;
+  overflow: hidden;
 }
 .layout_item{
   position: absolute;
@@ -54,7 +85,7 @@
 .grid_container{
   width: 380px;
   height: 614px;
-  padding: 8px 8px 8px 0;
+  padding: 8px 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
