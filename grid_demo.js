@@ -49,7 +49,6 @@ var grid_demo = {
         console.log(event);
         var file = event.target.result;
         if(file.match(/^data:image\//)){
-          console.log($('.grid_container'));
           $('.grid_container').css('background-image', 'url(' + event.target.result + ')');
         }
       }
@@ -71,6 +70,8 @@ var grid_demo = {
 
     var click_x = grid_demo.get_valid_midpoint(event.pageX, true);
     var click_y = grid_demo.get_valid_midpoint(event.pageY, false);
+    console.log(click_x);
+    console.log(click_y);
 
     var domNew = $('<div></div>')
       .addClass('layout_item')
@@ -384,29 +385,23 @@ var grid_demo = {
 
     // set grid size restrictions
     var domFirstCell = this.domGrid.find('.grid_cell').first();
-    this.cellWidth = domFirstCell.outerWidth() -
-      parseInt(domFirstCell.css('border-left-width')) / 2 -
-      parseInt(domFirstCell.css('border-right-width')) / 2;
-    this.cellHeight = domFirstCell.outerHeight() -
-      parseInt(domFirstCell.css('border-top-width')) / 2 -
-      parseInt(domFirstCell.css('border-bottom-width')) / 2;
+    var domFirstRow = this.domGrid.find('.grid_row').first();
+    this.cellWidth = domFirstCell.outerWidth();
+    this.cellHeight = domFirstCell.outerHeight();
 
     // these help handle calculations getting thrown off by collapsed borders
-    var borderOffsetX = parseInt(domFirstCell.css('border-left-width')) / 2;
-    var borderOffsetY = parseInt(domFirstCell.css('border-top-width')) / 2;
+    var marginOffsetX = parseInt(domFirstCell.css('margin-right'));
+    var marginOffsetY = parseInt(domFirstRow.css('margin-bottom'));
 
     // store grid midpoints to use in code creation
-    var domFirstCell = this.domGrid.find('.grid_cell').first();
-    var width = domFirstCell.outerWidth();
-    var midX = width / 2;
-    var offsetX = domFirstCell.position().left + borderOffsetX;;
-    var height = domFirstCell.outerHeight();
-    var offsetY = domFirstCell.position().top + borderOffsetY;
-    var midY = domFirstCell.height() / 2;
+    var midX = this.cellWidth / 2;
+    var midY = this.cellWidth / 2;
+    var offsetX = domFirstCell.position().left;
+    var offsetY = domFirstCell.position().top;
     for(var i = 0; i < this.numX; i++)
-      this.columns.push(width * i + midX + offsetX - borderOffsetX);
+      this.columns.push((this.cellWidth + marginOffsetX) * i + midX + offsetX);
     for(var i = 0; i < this.numY; i++)
-      this.rows.push(height * i + midY + offsetY + borderOffsetY);
+      this.rows.push((this.cellHeight + marginOffsetY) * i + midY + offsetY);
 
     // min / max values for easy access
     this.minX = this.columns[0];
@@ -424,6 +419,7 @@ var grid_demo = {
 
 $(document).ready(function(){
   grid_demo.init_grid($('#demo_grid'), $('.grid_builder').first(), $('#demo_code'));
+  console.log(grid_demo);
   $(document).tooltip();
 });
 
