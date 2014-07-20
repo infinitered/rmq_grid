@@ -343,35 +343,31 @@ var grid_demo = {
   build_grid: function(){
 
     // table header
-    var domTable = $('<table></table>').addClass('grid_builder');
-    var domThead = $('<thead></thead>');
-    var domHeadRow = $('<tr></tr>');
+    var domGrid = $('<div></div>').addClass('grid_builder');
+    var domHeadRow = $('<div></div>');
 
     // empty cell for the y axis labels
-    $('<td></td>').appendTo(domHeadRow);
+    $('<div></div>').addClass('grid_label grid_label_corner').appendTo(domHeadRow);
 
     // x axis labels
     for(var i = 0; i < this.numX; i++)
-      $('<td></td>').addClass('grid_label').text(this.num_to_alpha(i))
+      $('<div></div>').addClass('grid_label grid_label_top').text(this.num_to_alpha(i))
         .appendTo(domHeadRow);
-    domHeadRow.appendTo(domThead);
-    domThead.appendTo(domTable);
+    domHeadRow.appendTo(domGrid);
 
     // table body
-    var domTbody = $('<tbody></tbody>');
     for(var i = 0; i < this.numY; i++){
-       var domRow = $('<tr></tr>');
-       $('<td></td>').addClass('grid_label').text(i).appendTo(domRow);
+       var domRow = $('<div></div>').addClass('grid_row');
+       $('<div></div>').addClass('grid_label grid_label_left').text(i).appendTo(domRow);
        for(var j = 0; j< this.numX; j++)
-         $('<td></td>').addClass('grid_cell')
+         $('<div></div>').addClass('grid_cell')
            .text(this.num_to_alpha(j) + i)
            .appendTo(domRow);
-       domRow.appendTo(domTbody);
+       domRow.appendTo(domGrid);
     }
-    domTbody.appendTo(domTable);
 
-    domTable.appendTo(this.domContainer);
-    return domTable;
+    domGrid.appendTo(this.domContainer);
+    return domGrid;
   },
 
   /**
