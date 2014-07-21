@@ -305,7 +305,6 @@ var grid_demo = {
     return closest;
   },
 
-
   /**
    * Given a midpoint, find the relevant grid box edge
    *
@@ -375,9 +374,9 @@ var grid_demo = {
    * Function initializes the grid demo
    *
    * @param domContainer
-   * @param domGrid
+   * @param domTargetContainer
    */
-  init_grid: function(domContainer, domGrid, domTargetContainer){
+  init_grid: function(domContainer, domTargetContainer){
     this.domContainer = domContainer;
     this.domTarget = domTargetContainer;
 
@@ -419,7 +418,7 @@ var grid_demo = {
 }
 
 $(document).ready(function(){
-  grid_demo.init_grid($('#demo_grid'), $('.grid_builder').first(), $('#demo_code'));
+  grid_demo.init_grid($('#demo_grid'), $('#demo_code'));
   $(document).tooltip();
 });
 
