@@ -7,8 +7,10 @@ var grid_demo = {
   rows: [],
   cellWidth: 0,
   cellHeight: 0,
-  numX: 10,
-  numY: 13,
+  num_columns: 10,
+  num_rows: 12,
+  column_gutter: 10,
+  row_gutter: 10,
   minX: 0,
   maxX: 0,
   minY: 0,
@@ -292,7 +294,7 @@ var grid_demo = {
    */
   get_nearest_coord: function(coord, isX){
     var midpoints = isX ? this.columns : this.rows;
-    var numUnit = isX ? this.numX : this.numY;
+    var numUnit = isX ? this.num_columns : this.num_rows;
     var closest = 0;
     var distance = 9999;
     for(var i = 0; i < numUnit; i++){
@@ -350,16 +352,16 @@ var grid_demo = {
     $('<div></div>').addClass('grid_label grid_label_corner').appendTo(domHeadRow);
 
     // x axis labels
-    for(var i = 0; i < this.numX; i++)
+    for(var i = 0; i < this.num_columns; i++)
       $('<div></div>').addClass('grid_label grid_label_top').text(this.num_to_alpha(i))
         .appendTo(domHeadRow);
     domHeadRow.appendTo(domGrid);
 
     // table body
-    for(var i = 0; i < this.numY; i++){
+    for(var i = 0; i < this.num_rows; i++){
        var domRow = $('<div></div>').addClass('grid_row');
        $('<div></div>').addClass('grid_label grid_label_left').text(i).appendTo(domRow);
-       for(var j = 0; j< this.numX; j++)
+       for(var j = 0; j< this.num_columns; j++)
          $('<div></div>').addClass('grid_cell')
            .text(this.num_to_alpha(j) + i)
            .appendTo(domRow);
@@ -375,8 +377,9 @@ var grid_demo = {
    *
    * @param domContainer
    * @param domTargetContainer
+   * @param dimensions
    */
-  init_grid: function(domContainer, domTargetContainer){
+  init_grid: function(domContainer, domTargetContainer, dimensions){
     this.domContainer = domContainer;
     this.domTarget = domTargetContainer;
 
@@ -398,9 +401,9 @@ var grid_demo = {
     var offsetX = domFirstCell.position().left;
     var offsetY = domFirstCell.position().top;
     console.log(offsetY);
-    for(var i = 0; i < this.numX; i++)
+    for(var i = 0; i < this.num_columns; i++)
       this.columns.push((this.cellWidth + marginOffsetX) * i + midX + offsetX);
-    for(var i = 0; i < this.numY; i++)
+    for(var i = 0; i < this.num_rows; i++)
       this.rows.push((this.cellHeight + marginOffsetY) * i + midY + offsetY);
 
     // min / max values for easy access
