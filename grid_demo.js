@@ -451,7 +451,7 @@ var grid_demo = {
 
     // store grid midpoints to use in position calculations
     var midX = this.cellWidth / 2;
-    var midY = this.cellWidth / 2;
+    var midY = this.cellHeight / 2;
     var label_offset = 20; // height / width of the label rows
     var offsetX = this.domContainer.position().left + label_offset +
       this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
@@ -482,8 +482,8 @@ $(document).ready(function(){
     num_rows: 17,
     column_gutter: 2,
     row_gutter: 2 ,
-    content_left_margin: 0,
-    content_right_margin: 0
+    content_left_margin: 40,
+    content_right_margin: 40
   }
   grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
   $(document).tooltip();
