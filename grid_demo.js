@@ -353,7 +353,10 @@ var grid_demo = {
     // empty cell for the y axis labels
     $('<div></div>')
       .addClass('grid_label grid_label_corner')
-      .css({'margin-right': this.content_left_margin})
+      .css({
+        'margin-right': this.content_left_margin, 
+        'margin-bottom': this.content_top_margin
+      })
       .appendTo(domHeadRow);
 
     // x axis labels
@@ -361,7 +364,11 @@ var grid_demo = {
       $('<div></div>')
         .addClass('grid_label grid_label_top')
         .text(this.num_to_alpha(i))
-        .css({'width': this.cellWidth, 'margin-right': this.column_gutter})
+        .css({
+          'width': this.cellWidth, 
+          'margin-right': this.column_gutter,
+          'margin-bottom': this.content_top_margin
+        })
         .appendTo(domHeadRow);
     domHeadRow.appendTo(domGrid);
 
@@ -424,8 +431,11 @@ var grid_demo = {
   setRows: function(dimensions){
     this.setDimension('num_rows', dimensions);
     this.setDimension('row_gutter', dimensions);
+    this.setDimension('content_top_margin', dimensions);
+    this.setDimension('content_bottom_margin', dimensions);
     
-    var container_height = this.domContainer.height() - 20; // label row width
+    var container_height = this.domContainer.height() - 20 // label row width
+      - this.content_top_margin - this.content_bottom_margin;
     this.cellHeight = container_height / this.num_rows - this.row_gutter;
   },
 
@@ -456,7 +466,7 @@ var grid_demo = {
     var offsetX = this.domContainer.position().left + label_offset +
       this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
     var offsetY = this.domContainer.position().top + label_offset + 
-      parseInt(this.domContainer.css('padding-top'));
+      this.content_top_margin + parseInt(this.domContainer.css('padding-top'));
     for(var i = 0; i < this.num_columns; i++)
       this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
     for(var i = 0; i < this.num_rows; i++)
@@ -483,7 +493,9 @@ $(document).ready(function(){
     column_gutter: 2,
     row_gutter: 2 ,
     content_left_margin: 40,
-    content_right_margin: 40
+    content_right_margin: 40,
+    content_top_margin: 40,
+    content_bottom_margin: 40
   }
   grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
   $(document).tooltip();
