@@ -12,12 +12,9 @@
 
 .grid_label_top{
   height: 20px;
-  width: 26px;
-  margin-right: 10px;
   text-align: center;
 }
 .grid_label_left{
-  height: 36px;
   width: 20px;
   text-align: right;
   padding: 12px 6px 0 0;
@@ -42,8 +39,6 @@
   color: #000;
   font-weight: bold;
   background-color: #E4E4E4;
-  width: 26px;
-  height: 36px;
   display: inline-block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -51,7 +46,6 @@
   box-sizing: border-box;
   text-align: center;
   padding-top: 10px;
-  margin-right: 10px;
   overflow: hidden;
 }
 .layout_item{
