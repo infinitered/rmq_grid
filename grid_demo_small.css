@@ -82,4 +82,5 @@
   box-sizing: border-box;
   float: left;
   background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
