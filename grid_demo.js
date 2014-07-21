@@ -11,6 +11,10 @@ var grid_demo = {
   num_rows: 13,
   column_gutter: 10,
   row_gutter: 10,
+  content_left_margin: 0,
+  content_right_margin: 0,
+  content_top_margin: 0,
+  content_bottom_margin: 0,
   minX: 0,
   maxX: 0,
   minY: 0,
@@ -320,8 +324,6 @@ var grid_demo = {
     // since we're in the midpoint, we only add/subtract half
     dimension = dimension / 2;
 
-    // TODO WHY?
-    // midpoint = isX ? midpoint - 2 : midpoint;
     return isNE ? midpoint - dimension : midpoint + dimension;
   },
 
@@ -349,7 +351,10 @@ var grid_demo = {
     var domHeadRow = $('<div></div>');
 
     // empty cell for the y axis labels
-    $('<div></div>').addClass('grid_label grid_label_corner').appendTo(domHeadRow);
+    $('<div></div>')
+      .addClass('grid_label grid_label_corner')
+      .css({'margin-right': this.content_left_margin})
+      .appendTo(domHeadRow);
 
     // x axis labels
     for(var i = 0; i < this.num_columns; i++)
@@ -366,7 +371,7 @@ var grid_demo = {
         .css({'margin-bottom': this.row_gutter});
       $('<div></div>')
         .addClass('grid_label grid_label_left')
-        .css({'height': this.cellHeight})
+        .css({'height': this.cellHeight, 'margin-right': this.content_left_margin})
         .text(i).appendTo(domRow);
       for(var j = 0; j< this.num_columns; j++)
         $('<div></div>').addClass('grid_cell')
@@ -385,17 +390,29 @@ var grid_demo = {
   },
 
   /**
+   * Set demo_grid dimension if exists in dimension object
+   *
+   * @param name
+   * @param dimensions
+   */
+  setDimension: function(name, dimensions){
+    if(dimensions.hasOwnProperty(name))
+      this[name] = parseInt(dimensions[name]);
+  },
+
+  /**
    * Set the column related parameters
    *
    * @param dimensiosn
    */
   setColumns: function(dimensions){
-    if(dimensions.hasOwnProperty('num_columns'))
-      this.num_columns = parseInt(dimensions.num_columns); 
-    if(dimensions.hasOwnProperty('column_gutter'))
-      this.column_gutter = parseInt(dimensions.column_gutter);
+    this.setDimension('num_columns', dimensions);
+    this.setDimension('column_gutter', dimensions);
+    this.setDimension('content_left_margin', dimensions);
+    this.setDimension('content_right_margin', dimensions);
     
-    var container_width = this.domContainer.width() - 20; // label row width
+    var container_width = this.domContainer.width() - 20 // label row width
+      - this.content_left_margin - this.content_right_margin; 
     this.cellWidth = container_width / this.num_columns - this.column_gutter;
   },
 
@@ -405,10 +422,8 @@ var grid_demo = {
    * @param dimensiosn
    */
   setRows: function(dimensions){
-    if(dimensions.hasOwnProperty('num_rows'))
-      this.num_rows = parseInt(dimensions.num_rows); 
-    if(dimensions.hasOwnProperty('row_gutter'))
-      this.row_gutter = parseInt(dimensions.row_gutter);
+    this.setDimension('num_rows', dimensions);
+    this.setDimension('row_gutter', dimensions);
     
     var container_height = this.domContainer.height() - 20; // label row width
     this.cellHeight = container_height / this.num_rows - this.row_gutter;
@@ -439,7 +454,7 @@ var grid_demo = {
     var midY = this.cellWidth / 2;
     var label_offset = 20; // height / width of the label rows
     var offsetX = this.domContainer.position().left + label_offset +
-      parseInt(this.domContainer.css('padding-left'));
+      this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
     var offsetY = this.domContainer.position().top + label_offset + 
       parseInt(this.domContainer.css('padding-top'));
     for(var i = 0; i < this.num_columns; i++)
@@ -466,7 +481,9 @@ $(document).ready(function(){
     num_columns: 11,
     num_rows: 17,
     column_gutter: 2,
-    row_gutter: 2 
+    row_gutter: 2 ,
+    content_left_margin: 0,
+    content_right_margin: 0
   }
   grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
   $(document).tooltip();
