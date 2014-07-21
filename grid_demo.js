@@ -70,8 +70,6 @@ var grid_demo = {
 
     var click_x = grid_demo.get_valid_midpoint(event.pageX, true);
     var click_y = grid_demo.get_valid_midpoint(event.pageY, false);
-    console.log(click_x);
-    console.log(click_y);
 
     var domNew = $('<div></div>')
       .addClass('layout_item')
@@ -206,7 +204,7 @@ var grid_demo = {
     var attempt_delete = function(element){
       $( "#dialog-confirm" ).dialog({
       resizable: false,
-      height:260,
+      height: 260,
       modal: true,
       buttons: {
         "Yes": function() {
@@ -321,6 +319,8 @@ var grid_demo = {
     // since we're in the midpoint, we only add/subtract half
     dimension = dimension / 2;
 
+    // TODO WHY?
+    midpoint = isX ? midpoint - 2 : midpoint + 3;
     return isNE ? midpoint - dimension : midpoint + dimension;
   },
 
@@ -398,6 +398,7 @@ var grid_demo = {
     var midY = this.cellWidth / 2;
     var offsetX = domFirstCell.position().left;
     var offsetY = domFirstCell.position().top;
+    console.log(offsetY);
     for(var i = 0; i < this.numX; i++)
       this.columns.push((this.cellWidth + marginOffsetX) * i + midX + offsetX);
     for(var i = 0; i < this.numY; i++)
@@ -419,7 +420,6 @@ var grid_demo = {
 
 $(document).ready(function(){
   grid_demo.init_grid($('#demo_grid'), $('.grid_builder').first(), $('#demo_code'));
-  console.log(grid_demo);
   $(document).tooltip();
 });
 
