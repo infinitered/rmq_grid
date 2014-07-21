@@ -38,6 +38,26 @@ var grid_demo = {
   },
 
   /**
+   * Set the background image of the grids to user upload
+   *
+   * @param input
+   */
+  set_bg_image: function(input){
+    if(input.files && input.files[0]){
+      var reader = new FileReader();
+      reader.onload = function(event){
+        console.log(event);
+        var file = event.target.result;
+        if(file.match(/^data:image\//)){
+          console.log($('.grid_container'));
+          $('.grid_container').css('background-image', 'url(' + event.target.result + ')');
+        }
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  },
+
+  /**
    * Handle mouse down events
    *
    * @param event
@@ -132,27 +152,84 @@ var grid_demo = {
       // get the code text itself
       var code = grid_demo.get_rmq_code(domNew);
       domCodeBox.text(code).attr('title', code);
-      domCodeBox.click({frame: code, sister: domNew}, attempt_delete);
-      //domCodeBox.on('click', attempt_delete)
+
+      // clicked and timer are here to handle double click events
+      domCodeBox.data({'clicked': false, 'timer': null, 'sister': domNew});
+      domCodeBox.on('click', dispatch_codebox_clicks);
     };
 
-    var attempt_delete = function(event){
+    /**
+     * Monitor clicks on a codebox and dispatch separate click / dblclick events
+     */
+    var dispatch_codebox_clicks = function(){
+      var element = $(this);
+      var isClicked = element.data('clicked');
+
+      // double click successful
+      if(isClicked){
+        // clear out double click logic
+        clearTimeout(element.data('timer'));
+        element.data({'timer': null, 'clicked': false});
+
+        // don't forget to clear annoying browser text selection
+        if(window.getSelection){
+            if(window.getSelection().empty)
+              window.getSelection().empty();
+            else if(window.getSelection().removeAllRanges)
+              window.getSelection.removeAllRanges();
+        }
+        else if(document.selection)
+            document.selection.empty();
+
+        delete_box(element);
+      }
+
+      // single click
+      else{
+        element.data({
+          'clicked':  true,
+          'timer': setTimeout(function(){
+            element.data('clicked', false);
+            attempt_delete(element);
+          }, 250)
+        });
+      }
+      return false;
+    }
+
+    /**
+     * Delete with confirmation prompt
+     * 
+     * @param domElement
+     */
+    var attempt_delete = function(element){
       $( "#dialog-confirm" ).dialog({
       resizable: false,
       height:260,
       modal: true,
       buttons: {
         "Yes": function() {
-        $(event.target).fadeOut();
-        $(event.data.sister).fadeOut();
-        $( this ).dialog( "close" );
+          delete_box(element);
+          $( this ).dialog( "close" );
         },
         Cancel: function() {
-        $( this ).dialog( "close" );
+          $( this ).dialog( "close" );
         }
       }
-      }).html("<p>Are you sure you would like to remove <em>" + event.data.frame + "</em>?</p>");
+      }).html("<p>Are you sure you would like to remove <em>" + element[0].innerHTML + "</em>?</p>");
     };
+
+    /**
+     * Remove a box and its sister element
+     *
+     * @param domBox
+     */
+    var delete_box = function(domBox){
+      var domSister = domBox.data('sister'); 
+      if(domSister)
+        domSister.fadeOut();
+      domBox.fadeOut();
+    }
 
     /**
      * Releasing mouse triggers completion of new box
@@ -343,6 +420,9 @@ var grid_demo = {
 
     // start listeners
     this.domContainer.mousedown(this.start_new_box);
+    $('#bg_upload').on('change', function(){
+      grid_demo.set_bg_image(this);
+    });
   }
 }
 
