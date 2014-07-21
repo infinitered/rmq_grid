@@ -321,7 +321,7 @@ var grid_demo = {
     dimension = dimension / 2;
 
     // TODO WHY?
-    midpoint = isX ? midpoint - 2 : midpoint + 3;
+    // midpoint = isX ? midpoint - 2 : midpoint;
     return isNE ? midpoint - dimension : midpoint + dimension;
   },
 
@@ -353,19 +353,31 @@ var grid_demo = {
 
     // x axis labels
     for(var i = 0; i < this.num_columns; i++)
-      $('<div></div>').addClass('grid_label grid_label_top').text(this.num_to_alpha(i))
+      $('<div></div>')
+        .addClass('grid_label grid_label_top')
+        .text(this.num_to_alpha(i))
+        .css({'width': this.cellWidth, 'margin-right': this.column_gutter})
         .appendTo(domHeadRow);
     domHeadRow.appendTo(domGrid);
 
     // table body
     for(var i = 0; i < this.num_rows; i++){
-       var domRow = $('<div></div>').addClass('grid_row');
-       $('<div></div>').addClass('grid_label grid_label_left').text(i).appendTo(domRow);
-       for(var j = 0; j< this.num_columns; j++)
-         $('<div></div>').addClass('grid_cell')
-           .text(this.num_to_alpha(j) + i)
-           .appendTo(domRow);
-       domRow.appendTo(domGrid);
+      var domRow = $('<div></div>')
+        .css({'margin-bottom': this.row_gutter});
+      $('<div></div>')
+        .addClass('grid_label grid_label_left')
+        .css({'height': this.cellHeight})
+        .text(i).appendTo(domRow);
+      for(var j = 0; j< this.num_columns; j++)
+        $('<div></div>').addClass('grid_cell')
+          .css({
+            'height': this.cellHeight, 
+            'width': this.cellWidth, 
+            'margin-right': this.column_gutter
+          })
+          .text(this.num_to_alpha(j) + i)
+          .appendTo(domRow);
+      domRow.appendTo(domGrid);
     }
 
     domGrid.appendTo(this.domContainer);
@@ -419,27 +431,21 @@ var grid_demo = {
     this.setColumns(dimensions);
     this.setRows(dimensions);
     
+    // build the grid
     this.domGrid = this.build_grid(this.domContainer);
 
-    // set grid size restrictions
-    var domFirstCell = this.domGrid.find('.grid_cell').first();
-    var domFirstRow = this.domGrid.find('.grid_row').first();
-    this.cellWidth = domFirstCell.outerWidth();
-    this.cellHeight = domFirstCell.outerHeight();
-
-    // these help handle calculations getting thrown off by collapsed borders
-    var marginOffsetX = parseInt(domFirstCell.css('margin-right'));
-    var marginOffsetY = parseInt(domFirstRow.css('margin-bottom'));
-
-    // store grid midpoints to use in code creation
+    // store grid midpoints to use in position calculations
     var midX = this.cellWidth / 2;
     var midY = this.cellWidth / 2;
-    var offsetX = domFirstCell.position().left;
-    var offsetY = domFirstCell.position().top;
+    var label_offset = 20; // height / width of the label rows
+    var offsetX = this.domContainer.position().left + label_offset +
+      parseInt(this.domContainer.css('padding-left'));
+    var offsetY = this.domContainer.position().top + label_offset + 
+      parseInt(this.domContainer.css('padding-top'));
     for(var i = 0; i < this.num_columns; i++)
-      this.columns.push((this.cellWidth + marginOffsetX) * i + midX + offsetX);
+      this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
     for(var i = 0; i < this.num_rows; i++)
-      this.rows.push((this.cellHeight + marginOffsetY) * i + midY + offsetY);
+      this.rows.push((this.cellHeight + this.row_gutter) * i + midY + offsetY);
 
     // min / max values for easy access
     this.minX = this.columns[0];
@@ -457,10 +463,10 @@ var grid_demo = {
 
 $(document).ready(function(){
   var dimensions = {
-    num_columns: 10,
-    num_rows: 13,
-    column_gutter: 10,
-    row_gutter: 10
+    num_columns: 11,
+    num_rows: 17,
+    column_gutter: 2,
+    row_gutter: 2 
   }
   grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
   $(document).tooltip();

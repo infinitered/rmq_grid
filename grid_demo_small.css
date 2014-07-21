@@ -9,9 +9,6 @@
   cursor: default;
   border-collapse: collapse;
 }
-.grid_row{
-  margin-bottom: 10px;
-}
 
 .grid_label_top{
   height: 20px;
