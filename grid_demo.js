@@ -8,7 +8,7 @@ var grid_demo = {
   cellWidth: 0,
   cellHeight: 0,
   num_columns: 10,
-  num_rows: 12,
+  num_rows: 13,
   column_gutter: 10,
   row_gutter: 10,
   minX: 0,
@@ -373,6 +373,36 @@ var grid_demo = {
   },
 
   /**
+   * Set the column related parameters
+   *
+   * @param dimensiosn
+   */
+  setColumns: function(dimensions){
+    if(dimensions.hasOwnProperty('num_columns'))
+      this.num_columns = parseInt(dimensions.num_columns); 
+    if(dimensions.hasOwnProperty('column_gutter'))
+      this.column_gutter = parseInt(dimensions.column_gutter);
+    
+    var container_width = this.domContainer.width() - 20; // label row width
+    this.cellWidth = container_width / this.num_columns - this.column_gutter;
+  },
+
+  /**
+   * Set the row related parameters
+   *
+   * @param dimensiosn
+   */
+  setRows: function(dimensions){
+    if(dimensions.hasOwnProperty('num_rows'))
+      this.num_rows = parseInt(dimensions.num_rows); 
+    if(dimensions.hasOwnProperty('row_gutter'))
+      this.row_gutter = parseInt(dimensions.row_gutter);
+    
+    var container_height = this.domContainer.height() - 20; // label row width
+    this.cellHeight = container_height / this.num_rows - this.row_gutter;
+  },
+
+  /**
    * Function initializes the grid demo
    *
    * @param domContainer
@@ -382,7 +412,13 @@ var grid_demo = {
   init_grid: function(domContainer, domTargetContainer, dimensions){
     this.domContainer = domContainer;
     this.domTarget = domTargetContainer;
+    if(!dimensions)
+      dimensions = {}
 
+    // set grid dimensions
+    this.setColumns(dimensions);
+    this.setRows(dimensions);
+    
     this.domGrid = this.build_grid(this.domContainer);
 
     // set grid size restrictions
@@ -400,7 +436,6 @@ var grid_demo = {
     var midY = this.cellWidth / 2;
     var offsetX = domFirstCell.position().left;
     var offsetY = domFirstCell.position().top;
-    console.log(offsetY);
     for(var i = 0; i < this.num_columns; i++)
       this.columns.push((this.cellWidth + marginOffsetX) * i + midX + offsetX);
     for(var i = 0; i < this.num_rows; i++)
@@ -421,7 +456,13 @@ var grid_demo = {
 }
 
 $(document).ready(function(){
-  grid_demo.init_grid($('#demo_grid'), $('#demo_code'));
+  var dimensions = {
+    num_columns: 10,
+    num_rows: 13,
+    column_gutter: 10,
+    row_gutter: 10
+  }
+  grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
   $(document).tooltip();
 });
 
