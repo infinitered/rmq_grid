@@ -1,12 +1,11 @@
 var grid_demo = {
-  // static attributes
+
+  // html elements to bind grid to
   domGrid: null,
   domContainer: null,
   domTarget: null,
-  columns: [],
-  rows: [],
-  cellWidth: 0,
-  cellHeight: 0,
+
+  // user settable values
   num_columns: 10,
   num_rows: 13,
   column_gutter: 10,
@@ -15,6 +14,14 @@ var grid_demo = {
   content_right_margin: 0,
   content_top_margin: 0,
   content_bottom_margin: 0,
+
+  // class will set these values automatically
+  // don't mess with them
+  columns: [],
+  rows: [],
+  cellWidth: 0,
+  cellHeight: 0,
+  cell_padding: 10,
   minX: 0,
   maxX: 0,
   minY: 0,
@@ -384,6 +391,7 @@ var grid_demo = {
         $('<div></div>').addClass('grid_cell')
           .css({
             'width': this.cellWidth, 
+            'padding-top': this.cell_padding,
             'margin-right': this.column_gutter
           })
           .text(this.num_to_alpha(j) + i)
@@ -393,6 +401,16 @@ var grid_demo = {
 
     domGrid.appendTo(this.domContainer);
     return domGrid;
+  },
+
+  /**
+   * Set the top cell padding to vertically center cell text
+   */
+  setCellPadding: function(){
+    var font_size = 14;
+    this.cell_padding = this.cellHeight / 2 - font_size / 2;
+    if(this.cell_padding < 0)
+        this.cell_padding = 0;
   },
 
   /**
@@ -436,6 +454,9 @@ var grid_demo = {
     var container_height = this.domContainer.height() - 20 // label row width
       - this.content_top_margin - this.content_bottom_margin;
     this.cellHeight = container_height / this.num_rows - this.row_gutter;
+
+    // vertically center text
+    this.setCellPadding();
   },
 
   /**
@@ -503,7 +524,7 @@ var grid_demo = {
 $(document).ready(function(){
   var dimensions = {
     num_columns: 10,
-    num_rows: 17,
+    num_rows: 22,
     column_gutter: 2,
     row_gutter: 2,
     content_left_margin: 40,
