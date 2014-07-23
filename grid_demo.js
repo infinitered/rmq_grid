@@ -375,15 +375,14 @@ var grid_demo = {
     // table body
     for(var i = 0; i < this.num_rows; i++){
       var domRow = $('<div></div>')
-        .css({'margin-bottom': this.row_gutter});
+        .css({'margin-bottom': this.row_gutter, 'height': this.cellHeight});
       $('<div></div>')
         .addClass('grid_label grid_label_left')
-        .css({'height': this.cellHeight, 'margin-right': this.content_left_margin})
+        .css({'margin-right': this.content_left_margin})
         .text(i).appendTo(domRow);
       for(var j = 0; j< this.num_columns; j++)
         $('<div></div>').addClass('grid_cell')
           .css({
-            'height': this.cellHeight, 
             'width': this.cellWidth, 
             'margin-right': this.column_gutter
           })
@@ -471,6 +470,21 @@ var grid_demo = {
       this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
     for(var i = 0; i < this.num_rows; i++)
       this.rows.push((this.cellHeight + this.row_gutter) * i + midY + offsetY);
+    
+    // debugging midpoints
+    // for(var i = 0; i < this.num_columns; i++)
+    //     for(var j = 0; j < this.num_rows; j++){
+    //         $('<div></div>')
+    //           .css({
+    //             'position': 'absolute',
+    //             'width': '2px',
+    //             'height': '2px',
+    //             'background-color': '#F00',
+    //             'top': this.rows[j],
+    //             'left': this.columns[i]
+    //           })
+    //           .appendTo(this.domContainer);
+    //     }
 
     // min / max values for easy access
     this.minX = this.columns[0];
@@ -488,16 +502,17 @@ var grid_demo = {
 
 $(document).ready(function(){
   var dimensions = {
-    num_columns: 11,
+    num_columns: 10,
     num_rows: 17,
     column_gutter: 2,
-    row_gutter: 2 ,
+    row_gutter: 2,
     content_left_margin: 40,
     content_right_margin: 40,
     content_top_margin: 40,
     content_bottom_margin: 40
   }
   grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
+  console.log(grid_demo);
   $(document).tooltip();
 });
 

@@ -46,6 +46,7 @@
   text-align: center;
   padding-top: 10px;
   overflow: hidden;
+  height: 100%;
 }
 .layout_item{
   position: absolute;
