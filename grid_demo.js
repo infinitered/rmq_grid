@@ -59,7 +59,6 @@ var grid_demo = {
     if(input.files && input.files[0]){
       var reader = new FileReader();
       reader.onload = function(event){
-        console.log(event);
         var file = event.target.result;
         if(file.match(/^data:image\//)){
           $('.grid_container').css('background-image', 'url(' + event.target.result + ')');
@@ -491,21 +490,6 @@ var grid_demo = {
       this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
     for(var i = 0; i < this.num_rows; i++)
       this.rows.push((this.cellHeight + this.row_gutter) * i + midY + offsetY);
-    
-    // debugging midpoints
-    // for(var i = 0; i < this.num_columns; i++)
-    //     for(var j = 0; j < this.num_rows; j++){
-    //         $('<div></div>')
-    //           .css({
-    //             'position': 'absolute',
-    //             'width': '2px',
-    //             'height': '2px',
-    //             'background-color': '#F00',
-    //             'top': this.rows[j],
-    //             'left': this.columns[i]
-    //           })
-    //           .appendTo(this.domContainer);
-    //     }
 
     // min / max values for easy access
     this.minX = this.columns[0];
@@ -533,7 +517,6 @@ $(document).ready(function(){
     content_bottom_margin: 40
   }
   grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
-  console.log(grid_demo);
   $(document).tooltip();
 });
 
