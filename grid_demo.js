@@ -62,10 +62,36 @@ var grid_demo = {
         var file = event.target.result;
         if(file.match(/^data:image\//)){
           $('.grid_container').css('background-image', 'url(' + event.target.result + ')');
+          // this.add_bg_dimension_listeners();
         }
       }
       reader.readAsDataURL(input.files[0]);
     }
+  },
+
+  /**
+   * Set some dimension of the background images
+   *
+   * @param dimension
+   * @param value
+   */
+  set_bg_dimension: function(dimension, value){
+    if(dimension == 'top' || dimension == 'left'){
+      var css_dimension = 'background-position';
+      value += 'px';
+    }
+    else{
+      var css_dimension = 'background-size';
+      value += '%';
+    }
+    var old = $('.grid_container').css(css_dimension).split(' ');
+
+    if(dimension == 'left' || dimension == 'width')
+        old[0] = value;
+    else
+        old[1] = value;
+
+    $('.grid_container').css(css_dimension, old.join(' '));
   },
 
   /**
@@ -501,6 +527,18 @@ var grid_demo = {
     this.domContainer.mousedown(this.start_new_box);
     $('#bg_upload').on('change', function(){
       grid_demo.set_bg_image(this);
+    });
+    $('#bg_x').on('change', function(){
+        grid_demo.set_bg_dimension('left', this.value);
+    });
+    $('#bg_y').on('change', function(){
+        grid_demo.set_bg_dimension('top', this.value);
+    });
+    $('#bg_width').on('change', function(){
+        grid_demo.set_bg_dimension('width', this.value);
+    });
+    $('#bg_height').on('change', function(){
+        grid_demo.set_bg_dimension('height', this.value);
     });
   }
 }
