@@ -461,7 +461,7 @@ var grid_demo = {
     this.setDimension('content_left_margin', dimensions);
     this.setDimension('content_right_margin', dimensions);
     
-    var container_width = this.domContainer.width() - 20 // label row width
+    var container_width = this.domContainer.width() - this.label_offset
       - this.content_left_margin - this.content_right_margin; 
     this.cellWidth = container_width / this.num_columns - this.column_gutter;
 
@@ -486,7 +486,7 @@ var grid_demo = {
     this.setDimension('content_top_margin', dimensions);
     this.setDimension('content_bottom_margin', dimensions);
     
-    var container_height = this.domContainer.height() - 20 // label row width
+    var container_height = this.domContainer.height() - this.label_offset
       - this.content_top_margin - this.content_bottom_margin;
     this.cellHeight = container_height / this.num_rows - this.row_gutter;
 
