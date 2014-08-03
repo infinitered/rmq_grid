@@ -530,12 +530,21 @@ var grid_demo = {
           break;
     }
 
-    console.log(grid_demo.columns);
-
     // rebuild grid
     grid_demo.domGrid = grid_demo.build_grid(grid_demo.domContainer);
   },
 
+  /**
+   * Preset the dimension changing inputs to the current grid dimensions
+   */
+  presetDimensionInputs: function(){
+    var inputs = ['num_columns', 'column_gutter',
+      'content_left_margin', 'content_right_margin',
+      'num_rows', 'row_gutter', 'content_top_margin', 
+      'content_bottom_margin']; 
+    for(var i = 0; i < inputs.length; i++)
+      $('#' + inputs[i])[0].value = this[inputs[i]];
+  },
 
   /**
    * Function initializes the grid demo
@@ -556,6 +565,9 @@ var grid_demo = {
     
     // build the grid
     this.domGrid = this.build_grid(this.domContainer);
+
+    // preset grid dimension inputs
+    this.presetDimensionInputs();
 
     // start event listeners
     this.domContainer.mousedown(this.start_new_box);
