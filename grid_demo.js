@@ -504,6 +504,36 @@ var grid_demo = {
   },
 
   /**
+   * Change grid dimensions according to the changed input and rebuild the grid
+   */
+  changeGridDimension: function(){
+    grid_demo.domGrid.remove();
+    var dimensions = {};
+    dimensions[this.id] = this.value;
+
+    // reset changed grid dimensions
+    switch(this.id){
+        case 'num_columns':
+        case 'column_gutter':
+        case 'content_left_margin':
+        case 'content_right_margin':
+          grid_demo.setColumns(dimensions);
+          break;
+
+        case 'num_rows': 
+        case 'row_gutter': 
+        case 'content_top_margin': 
+        case 'content_bottom_margin': 
+          grid_demo.setRows(dimensions);
+          break;
+    }
+
+    // rebuild grid
+    grid_demo.domGrid = grid_demo.build_grid(grid_demo.domContainer);
+  },
+
+
+  /**
    * Function initializes the grid demo
    *
    * @param domContainer
@@ -523,7 +553,7 @@ var grid_demo = {
     // build the grid
     this.domGrid = this.build_grid(this.domContainer);
 
-    // start listeners
+    // start event listeners
     this.domContainer.mousedown(this.start_new_box);
     $('#bg_upload').on('change', function(){
       grid_demo.set_bg_image(this);
@@ -531,6 +561,7 @@ var grid_demo = {
     $('.bg_dimension').on('change', function(){
       grid_demo.set_bg_dimension(this.id.split('_')[1], this.value);
     });
+    $('.grid_dimension').on('change', this.changeGridDimension);
   }
 }
 
