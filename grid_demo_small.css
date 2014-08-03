@@ -94,3 +94,6 @@
 .inactive{
   display: none;
 }
+.control_container{
+  float: left;
+}
