@@ -62,7 +62,7 @@ var grid_demo = {
         var file = event.target.result;
         if(file.match(/^data:image\//)){
           $('.grid_container').css('background-image', 'url(' + event.target.result + ')');
-          // this.add_bg_dimension_listeners();
+          $('#bg_image_controls').css('display', 'block');
         }
       }
       reader.readAsDataURL(input.files[0]);
@@ -529,7 +529,7 @@ var grid_demo = {
       grid_demo.set_bg_image(this);
     });
     $('.bg_dimension').on('change', function(){
-        grid_demo.set_bg_dimension(this.id.split('_')[1], this.value);
+      grid_demo.set_bg_dimension(this.id.split('_')[1], this.value);
     });
   }
 }
