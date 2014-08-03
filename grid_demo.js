@@ -528,17 +528,8 @@ var grid_demo = {
     $('#bg_upload').on('change', function(){
       grid_demo.set_bg_image(this);
     });
-    $('#bg_x').on('change', function(){
-        grid_demo.set_bg_dimension('left', this.value);
-    });
-    $('#bg_y').on('change', function(){
-        grid_demo.set_bg_dimension('top', this.value);
-    });
-    $('#bg_width').on('change', function(){
-        grid_demo.set_bg_dimension('width', this.value);
-    });
-    $('#bg_height').on('change', function(){
-        grid_demo.set_bg_dimension('height', this.value);
+    $('.bg_dimension').on('change', function(){
+        grid_demo.set_bg_dimension(this.id.split('_')[1], this.value);
     });
   }
 }
