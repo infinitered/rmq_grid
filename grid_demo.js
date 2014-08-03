@@ -17,6 +17,7 @@ var grid_demo = {
 
   // class will set these values automatically
   // don't mess with them
+  label_offset: 20,
   columns: [],
   rows: [],
   cellWidth: 0,
@@ -463,6 +464,15 @@ var grid_demo = {
     var container_width = this.domContainer.width() - 20 // label row width
       - this.content_left_margin - this.content_right_margin; 
     this.cellWidth = container_width / this.num_columns - this.column_gutter;
+
+    // store grid column midpoints for position caclulations
+    var midX = this.cellWidth / 2;
+    var offsetX = this.domContainer.position().left + this.label_offset +
+      this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
+    for(var i = 0; i < this.num_columns; i++)
+      this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
+    this.minX = this.columns[0];
+    this.maxX = this.columns[this.columns.length-1];
   },
 
   /**
@@ -479,6 +489,15 @@ var grid_demo = {
     var container_height = this.domContainer.height() - 20 // label row width
       - this.content_top_margin - this.content_bottom_margin;
     this.cellHeight = container_height / this.num_rows - this.row_gutter;
+
+    // store row midpoints to use in position calculations
+    var midY = this.cellHeight / 2;
+    var offsetY = this.domContainer.position().top + this.label_offset + 
+      this.content_top_margin + parseInt(this.domContainer.css('padding-top'));
+    for(var i = 0; i < this.num_rows; i++)
+      this.rows.push((this.cellHeight + this.row_gutter) * i + midY + offsetY);
+    this.minY = this.rows[0];
+    this.maxY = this.rows[this.rows.length-1];
 
     // vertically center text
     this.setCellPadding();
@@ -503,25 +522,6 @@ var grid_demo = {
     
     // build the grid
     this.domGrid = this.build_grid(this.domContainer);
-
-    // store grid midpoints to use in position calculations
-    var midX = this.cellWidth / 2;
-    var midY = this.cellHeight / 2;
-    var label_offset = 20; // height / width of the label rows
-    var offsetX = this.domContainer.position().left + label_offset +
-      this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
-    var offsetY = this.domContainer.position().top + label_offset + 
-      this.content_top_margin + parseInt(this.domContainer.css('padding-top'));
-    for(var i = 0; i < this.num_columns; i++)
-      this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
-    for(var i = 0; i < this.num_rows; i++)
-      this.rows.push((this.cellHeight + this.row_gutter) * i + midY + offsetY);
-
-    // min / max values for easy access
-    this.minX = this.columns[0];
-    this.minY = this.rows[0];
-    this.maxX = this.columns[this.columns.length-1];
-    this.maxY = this.rows[this.rows.length-1];
 
     // start listeners
     this.domContainer.mousedown(this.start_new_box);
