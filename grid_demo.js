@@ -469,6 +469,7 @@ var grid_demo = {
     var midX = this.cellWidth / 2;
     var offsetX = this.domContainer.position().left + this.label_offset +
       this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
+    this.columns = [];
     for(var i = 0; i < this.num_columns; i++)
       this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
     this.minX = this.columns[0];
@@ -494,6 +495,7 @@ var grid_demo = {
     var midY = this.cellHeight / 2;
     var offsetY = this.domContainer.position().top + this.label_offset + 
       this.content_top_margin + parseInt(this.domContainer.css('padding-top'));
+    this.rows = [];
     for(var i = 0; i < this.num_rows; i++)
       this.rows.push((this.cellHeight + this.row_gutter) * i + midY + offsetY);
     this.minY = this.rows[0];
@@ -527,6 +529,8 @@ var grid_demo = {
           grid_demo.setRows(dimensions);
           break;
     }
+
+    console.log(grid_demo.columns);
 
     // rebuild grid
     grid_demo.domGrid = grid_demo.build_grid(grid_demo.domContainer);
