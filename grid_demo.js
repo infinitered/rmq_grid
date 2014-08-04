@@ -386,6 +386,17 @@ var grid_demo = {
   },
 
   /**
+   * Convert alpha column name to numeric column index
+   *
+   * @param int
+   *
+   * @return char
+   */
+  alpha_to_num: function(x){
+     return x.charCodeAt(0) - 97;
+  },
+
+  /**
    * Build the grid html
    *
    * @return domGrid
@@ -519,6 +530,32 @@ var grid_demo = {
   },
 
   /**
+   * Does a midpoint exist
+   *
+   * @param midpoint (string)
+   * 
+   * @return boolean
+   */
+  midpoint_exists: function(midpoint){
+    return this.alpha_to_num(midpoint) < this.columns.length &&
+      parseInt(midpoint.substring(1)) < this.rows.length;
+  },
+
+  /**
+   * Repositin all codeboxes according to their stored gridpoints
+   */
+  reposition_boxes: function(){
+    $('.layout_code').each(function(index, codebox){
+      codebox = $(codebox);
+      var grid_points = codebox.data('grid_points');
+      if(grid_demo.midpoint_exists(grid_points.start) &&
+        grid_demo.midpoint_exists(grid_points.end))
+        console.log('do something');
+    });
+
+  },
+
+  /**
    * Change grid dimensions according to the changed input and rebuild the grid
    */
   changeGridDimension: function(){
@@ -546,6 +583,8 @@ var grid_demo = {
     // rebuild grid
     grid_demo.domGrid = grid_demo.build_grid(grid_demo.domContainer);
 
+    // readjust existing codeboxes
+    grid_demo.reposition_boxes();
   },
 
   /**
