@@ -362,15 +362,15 @@ var grid_demo = {
    *
    * @param midpoint
    * @param isX
-   * @param isNE
+   * @param isNW
    */
-  get_edge_from_midpoint: function(midpoint, isX, isNE){
+  get_edge_from_midpoint: function(midpoint, isX, isNW){
     var dimension = isX ? this.cellWidth : this.cellHeight;
 
     // since we're in the midpoint, we only add/subtract half
     dimension = dimension / 2;
 
-    return isNE ? midpoint - dimension : midpoint + dimension;
+    return isNW ? midpoint - dimension : midpoint + dimension;
   },
 
   /**
@@ -530,15 +530,27 @@ var grid_demo = {
   },
 
   /**
+   * Get a row / column index from the gridpoint given
+   *
+   * @param gridpoint
+   * @param bolX
+   *
+   * @return int
+   */
+  get_gridpoint_index: function(gridpoint, bolX){
+    return bolX ? this.alpha_to_num(gridpoint) : parseInt(gridpoint.substring(1));
+  },
+
+  /**
    * Does a midpoint exist
    *
    * @param midpoint (string)
    * 
    * @return boolean
    */
-  midpoint_exists: function(midpoint){
-    return this.alpha_to_num(midpoint) < this.columns.length &&
-      parseInt(midpoint.substring(1)) < this.rows.length;
+  gridpoint_exists: function(gridpoint){
+    return this.get_gridpoint_index(gridpoint, true) < this.columns.length &&
+      this.get_gridpoint_index(gridpoint, false) < this.rows.length;
   },
 
   /**
@@ -547,10 +559,27 @@ var grid_demo = {
   reposition_boxes: function(){
     $('.layout_code').each(function(index, codebox){
       codebox = $(codebox);
+      var sister = codebox.data('sister');
       var grid_points = codebox.data('grid_points');
-      if(grid_demo.midpoint_exists(grid_points.start) &&
-        grid_demo.midpoint_exists(grid_points.end))
-        console.log('do something');
+      if(grid_demo.gridpoint_exists(grid_points.start) && grid_demo.gridpoint_exists(grid_points.end)){
+
+        // calculate grid dimensions
+        var css_left = grid_demo.get_edge_from_midpoint(
+          grid_demo.columns[grid_demo.get_gridpoint_index(grid_points.start, true)], true, true);
+        var css_top = grid_demo.get_edge_from_midpoint(
+          grid_demo.rows[grid_demo.get_gridpoint_index(grid_points.start, false)], false, true);
+        var css_width = grid_demo.get_edge_from_midpoint(
+          grid_demo.columns[grid_demo.get_gridpoint_index(grid_points.end, true)], true, false) - css_left;
+        var css_height = grid_demo.get_edge_from_midpoint(
+          grid_demo.rows[grid_demo.get_gridpoint_index(grid_points.start, false)], false, false) - css_top;
+      
+        // position grid box
+        sister.css({'top': css_top, 'left': css_left, 'width': css_width, 'height': css_height});
+
+      }
+      else{
+        // destroy box
+      }
     });
 
   },
