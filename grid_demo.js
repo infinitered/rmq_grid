@@ -188,11 +188,12 @@ var grid_demo = {
       domCodeBox.appendTo(grid_demo.domTarget);
 
       // get the code text itself
-      var code = grid_demo.get_rmq_code(domNew);
+      var grid_points = grid_demo.get_grid_points(domNew);
+      var code = grid_demo.get_rmq_code(grid_points);
       domCodeBox.text(code).attr('title', code);
 
       // clicked and timer are here to handle double click events
-      domCodeBox.data({'clicked': false, 'timer': null, 'sister': domNew});
+      domCodeBox.data({'clicked': false, 'timer': null, 'sister': domNew, 'grid_points': grid_points});
       domCodeBox.on('click', dispatch_codebox_clicks);
     };
 
@@ -283,16 +284,28 @@ var grid_demo = {
   },
 
   /**
-   * Generate rmq code for building a box on the grid
+   * Get the grid corner points for the passed box
    *
    * @param domBox
    *
+   * @return object
+   */
+  get_grid_points: function(domBox){
+    var grid_points = {}
+    grid_points.start = this.get_nearest_midpoint(domBox, true);
+    grid_points.end = this.get_nearest_midpoint(domBox, false);
+    return grid_points;
+  },
+
+  /**
+   * Generate rmq code for building a box on the grid
+   *
+   * @param grid_points
+   *
    * @return string
    */
-  get_rmq_code: function(domBox){
-    var start = this.get_nearest_midpoint(domBox, true);
-    var end = this.get_nearest_midpoint(domBox, false);
-    return 'st.frame = \'' + start + ':' + end + '\'';
+  get_rmq_code: function(grid_points){
+    return 'st.frame = \'' + grid_points.start + ':' + grid_points.end + '\'';
   },
 
   /**
@@ -532,6 +545,7 @@ var grid_demo = {
 
     // rebuild grid
     grid_demo.domGrid = grid_demo.build_grid(grid_demo.domContainer);
+
   },
 
   /**
