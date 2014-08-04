@@ -210,7 +210,7 @@ var grid_demo = {
         else if(document.selection)
             document.selection.empty();
 
-        delete_box(element);
+        grid_demo.delete_box(element);
       }
 
       // single click
@@ -238,7 +238,7 @@ var grid_demo = {
       modal: true,
       buttons: {
         "Yes": function() {
-          delete_box(element);
+          grid_demo.delete_box(element);
           $( this ).dialog( "close" );
         },
         Cancel: function() {
@@ -247,18 +247,6 @@ var grid_demo = {
       }
       }).html("<p>Are you sure you would like to remove <em>" + element[0].innerHTML + "</em>?</p>");
     };
-
-    /**
-     * Remove a box and its sister element
-     *
-     * @param domBox
-     */
-    var delete_box = function(domBox){
-      var domSister = domBox.data('sister'); 
-      if(domSister)
-        domSister.fadeOut();
-      domBox.fadeOut();
-    }
 
     /**
      * Releasing mouse triggers completion of new box
@@ -271,6 +259,18 @@ var grid_demo = {
      */
     grid_demo.domContainer.on('mouseleave', finish_new_box);
 
+  },
+
+  /**
+   * Remove a box and its sister element
+   *
+   * @param domBox
+   */
+  delete_box: function(domBox){
+    var domSister = domBox.data('sister'); 
+    if(domSister)
+      domSister.fadeOut();
+    domBox.fadeOut();
   },
 
   /**
@@ -589,8 +589,8 @@ var grid_demo = {
       }
 
       // valid gridpoints have been removed, destroy the box
-      else{
-      }
+      else
+        grid_demo.delete_box(codebox);
     });
 
   },
