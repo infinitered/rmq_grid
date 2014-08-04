@@ -17,6 +17,7 @@ var grid_demo = {
 
   // class will set these values automatically
   // don't mess with them
+  label_offset: 20,
   columns: [],
   rows: [],
   cellWidth: 0,
@@ -62,10 +63,36 @@ var grid_demo = {
         var file = event.target.result;
         if(file.match(/^data:image\//)){
           $('.grid_container').css('background-image', 'url(' + event.target.result + ')');
+          $('#bg_image_controls').css('display', 'block');
         }
       }
       reader.readAsDataURL(input.files[0]);
     }
+  },
+
+  /**
+   * Set some dimension of the background images
+   *
+   * @param dimension
+   * @param value
+   */
+  set_bg_dimension: function(dimension, value){
+    if(dimension == 'top' || dimension == 'left'){
+      var css_dimension = 'background-position';
+      value += 'px';
+    }
+    else{
+      var css_dimension = 'background-size';
+      value += '%';
+    }
+    var old = $('.grid_container').css(css_dimension).split(' ');
+
+    if(dimension == 'left' || dimension == 'width')
+        old[0] = value;
+    else
+        old[1] = value;
+
+    $('.grid_container').css(css_dimension, old.join(' '));
   },
 
   /**
@@ -147,25 +174,16 @@ var grid_demo = {
 
       // create the mirror box to display the code
       var domCodeBox = domNew.clone();
-      var objPosition = domNew.position();
-      var objGridPosition = grid_demo.domContainer.position();
-      var objTargetPosition = grid_demo.domTarget.position();
-      var offsetPadding = 16;
-
-      domCodeBox.css({
-        'top': objPosition.top - objGridPosition.top + objTargetPosition.top,
-        'left': objPosition.left - objGridPosition.left + objTargetPosition.left,
-        'width': domNew.width() - offsetPadding,
-        'height': domNew.height() - offsetPadding
-      }).removeClass('layout_item').addClass('layout_code');
-      domCodeBox.appendTo(grid_demo.domTarget);
+      grid_demo.position_codebox(domNew, domCodeBox);
+      domCodeBox.removeClass('layout_item').addClass('layout_code').appendTo(grid_demo.domTarget);
 
       // get the code text itself
-      var code = grid_demo.get_rmq_code(domNew);
+      var grid_points = grid_demo.get_grid_points(domNew);
+      var code = grid_demo.get_rmq_code(grid_points);
       domCodeBox.text(code).attr('title', code);
 
       // clicked and timer are here to handle double click events
-      domCodeBox.data({'clicked': false, 'timer': null, 'sister': domNew});
+      domCodeBox.data({'clicked': false, 'timer': null, 'sister': domNew, 'grid_points': grid_points});
       domCodeBox.on('click', dispatch_codebox_clicks);
     };
 
@@ -192,7 +210,7 @@ var grid_demo = {
         else if(document.selection)
             document.selection.empty();
 
-        delete_box(element);
+        grid_demo.delete_box(element);
       }
 
       // single click
@@ -220,7 +238,7 @@ var grid_demo = {
       modal: true,
       buttons: {
         "Yes": function() {
-          delete_box(element);
+          grid_demo.delete_box(element);
           $( this ).dialog( "close" );
         },
         Cancel: function() {
@@ -229,18 +247,6 @@ var grid_demo = {
       }
       }).html("<p>Are you sure you would like to remove <em>" + element[0].innerHTML + "</em>?</p>");
     };
-
-    /**
-     * Remove a box and its sister element
-     *
-     * @param domBox
-     */
-    var delete_box = function(domBox){
-      var domSister = domBox.data('sister'); 
-      if(domSister)
-        domSister.fadeOut();
-      domBox.fadeOut();
-    }
 
     /**
      * Releasing mouse triggers completion of new box
@@ -256,16 +262,60 @@ var grid_demo = {
   },
 
   /**
-   * Generate rmq code for building a box on the grid
+   * Remove a box and its sister element
+   *
+   * @param domBox
+   */
+  delete_box: function(domBox){
+    var domSister = domBox.data('sister'); 
+    if(domSister)
+      domSister.fadeOut();
+    domBox.fadeOut();
+  },
+
+  /**
+   * Position codebox based on sister gridbox
+   *
+   * @param domGridBox
+   * @param domCodeBox
+   */
+  position_codebox: function(domGridBox, domCodeBox){
+    var objPosition = domGridBox.position();
+    var objGridPosition = this.domContainer.position();
+    var objTargetPosition = this.domTarget.position();
+    var offsetPadding = 16;
+
+    domCodeBox.css({
+      'top': objPosition.top - objGridPosition.top + objTargetPosition.top,
+      'left': objPosition.left - objGridPosition.left + objTargetPosition.left,
+      'width': domGridBox.width() - offsetPadding,
+      'height': domGridBox.height() - offsetPadding
+    });
+  },
+
+  /**
+   * Get the grid corner points for the passed box
    *
    * @param domBox
    *
+   * @return object
+   */
+  get_grid_points: function(domBox){
+    var grid_points = {}
+    grid_points.start = this.get_nearest_midpoint(domBox, true);
+    grid_points.end = this.get_nearest_midpoint(domBox, false);
+    return grid_points;
+  },
+
+  /**
+   * Generate rmq code for building a box on the grid
+   *
+   * @param grid_points
+   *
    * @return string
    */
-  get_rmq_code: function(domBox){
-    var start = this.get_nearest_midpoint(domBox, true);
-    var end = this.get_nearest_midpoint(domBox, false);
-    return 'st.frame = \'' + start + ':' + end + '\'';
+  get_rmq_code: function(grid_points){
+    return 'st.frame = \'' + grid_points.start + ':' + grid_points.end + '\'';
   },
 
   /**
@@ -322,15 +372,15 @@ var grid_demo = {
    *
    * @param midpoint
    * @param isX
-   * @param isNE
+   * @param isNW
    */
-  get_edge_from_midpoint: function(midpoint, isX, isNE){
+  get_edge_from_midpoint: function(midpoint, isX, isNW){
     var dimension = isX ? this.cellWidth : this.cellHeight;
 
     // since we're in the midpoint, we only add/subtract half
     dimension = dimension / 2;
 
-    return isNE ? midpoint - dimension : midpoint + dimension;
+    return isNW ? midpoint - dimension : midpoint + dimension;
   },
 
   /**
@@ -343,6 +393,17 @@ var grid_demo = {
    */
   num_to_alpha: function(x){
      return String.fromCharCode(97 + x);
+  },
+
+  /**
+   * Convert alpha column name to numeric column index
+   *
+   * @param int
+   *
+   * @return char
+   */
+  alpha_to_num: function(x){
+     return x.charCodeAt(0) - 97;
   },
 
   /**
@@ -434,9 +495,19 @@ var grid_demo = {
     this.setDimension('content_left_margin', dimensions);
     this.setDimension('content_right_margin', dimensions);
     
-    var container_width = this.domContainer.width() - 20 // label row width
+    var container_width = this.domContainer.width() - this.label_offset
       - this.content_left_margin - this.content_right_margin; 
     this.cellWidth = container_width / this.num_columns - this.column_gutter;
+
+    // store grid column midpoints for position caclulations
+    var midX = this.cellWidth / 2;
+    var offsetX = this.domContainer.position().left + this.label_offset +
+      this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
+    this.columns = [];
+    for(var i = 0; i < this.num_columns; i++)
+      this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
+    this.minX = this.columns[0];
+    this.maxX = this.columns[this.columns.length-1];
   },
 
   /**
@@ -450,12 +521,122 @@ var grid_demo = {
     this.setDimension('content_top_margin', dimensions);
     this.setDimension('content_bottom_margin', dimensions);
     
-    var container_height = this.domContainer.height() - 20 // label row width
+    var container_height = this.domContainer.height() - this.label_offset
       - this.content_top_margin - this.content_bottom_margin;
     this.cellHeight = container_height / this.num_rows - this.row_gutter;
 
+    // store row midpoints to use in position calculations
+    var midY = this.cellHeight / 2;
+    var offsetY = this.domContainer.position().top + this.label_offset + 
+      this.content_top_margin + parseInt(this.domContainer.css('padding-top'));
+    this.rows = [];
+    for(var i = 0; i < this.num_rows; i++)
+      this.rows.push((this.cellHeight + this.row_gutter) * i + midY + offsetY);
+    this.minY = this.rows[0];
+    this.maxY = this.rows[this.rows.length-1];
+
     // vertically center text
     this.setCellPadding();
+  },
+
+  /**
+   * Get a row / column index from the gridpoint given
+   *
+   * @param gridpoint
+   * @param bolX
+   *
+   * @return int
+   */
+  get_gridpoint_index: function(gridpoint, bolX){
+    return bolX ? this.alpha_to_num(gridpoint) : parseInt(gridpoint.substring(1));
+  },
+
+  /**
+   * Does a midpoint exist
+   *
+   * @param midpoint (string)
+   * 
+   * @return boolean
+   */
+  gridpoint_exists: function(gridpoint){
+    return this.get_gridpoint_index(gridpoint, true) < this.columns.length &&
+      this.get_gridpoint_index(gridpoint, false) < this.rows.length;
+  },
+
+  /**
+   * Repositin all codeboxes according to their stored gridpoints
+   */
+  reposition_boxes: function(){
+    $('.layout_code').each(function(index, codebox){
+      codebox = $(codebox);
+      var sister = codebox.data('sister');
+      var grid_points = codebox.data('grid_points');
+      if(grid_demo.gridpoint_exists(grid_points.start) && grid_demo.gridpoint_exists(grid_points.end)){
+
+        // calculate grid dimensions
+        var css_left = grid_demo.get_edge_from_midpoint(
+          grid_demo.columns[grid_demo.get_gridpoint_index(grid_points.start, true)], true, true);
+        var css_top = grid_demo.get_edge_from_midpoint(
+          grid_demo.rows[grid_demo.get_gridpoint_index(grid_points.start, false)], false, true);
+        var css_width = grid_demo.get_edge_from_midpoint(
+          grid_demo.columns[grid_demo.get_gridpoint_index(grid_points.end, true)], true, false) - css_left;
+        var css_height = grid_demo.get_edge_from_midpoint(
+          grid_demo.rows[grid_demo.get_gridpoint_index(grid_points.end, false)], false, false) - css_top;
+      
+        // position grid box
+        sister.css({'top': css_top, 'left': css_left, 'width': css_width, 'height': css_height});
+        grid_demo.position_codebox(sister, codebox);
+      }
+
+      // valid gridpoints have been removed, destroy the box
+      else
+        grid_demo.delete_box(codebox);
+    });
+
+  },
+
+  /**
+   * Change grid dimensions according to the changed input and rebuild the grid
+   */
+  changeGridDimension: function(){
+    grid_demo.domGrid.remove();
+    var dimensions = {};
+    dimensions[this.id] = this.value;
+
+    // reset changed grid dimensions
+    switch(this.id){
+        case 'num_columns':
+        case 'column_gutter':
+        case 'content_left_margin':
+        case 'content_right_margin':
+          grid_demo.setColumns(dimensions);
+          break;
+
+        case 'num_rows': 
+        case 'row_gutter': 
+        case 'content_top_margin': 
+        case 'content_bottom_margin': 
+          grid_demo.setRows(dimensions);
+          break;
+    }
+
+    // rebuild grid
+    grid_demo.domGrid = grid_demo.build_grid(grid_demo.domContainer);
+
+    // readjust existing codeboxes
+    grid_demo.reposition_boxes();
+  },
+
+  /**
+   * Preset the dimension changing inputs to the current grid dimensions
+   */
+  presetDimensionInputs: function(){
+    var inputs = ['num_columns', 'column_gutter',
+      'content_left_margin', 'content_right_margin',
+      'num_rows', 'row_gutter', 'content_top_margin', 
+      'content_bottom_margin']; 
+    for(var i = 0; i < inputs.length; i++)
+      $('#' + inputs[i])[0].value = this[inputs[i]];
   },
 
   /**
@@ -478,30 +659,18 @@ var grid_demo = {
     // build the grid
     this.domGrid = this.build_grid(this.domContainer);
 
-    // store grid midpoints to use in position calculations
-    var midX = this.cellWidth / 2;
-    var midY = this.cellHeight / 2;
-    var label_offset = 20; // height / width of the label rows
-    var offsetX = this.domContainer.position().left + label_offset +
-      this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
-    var offsetY = this.domContainer.position().top + label_offset + 
-      this.content_top_margin + parseInt(this.domContainer.css('padding-top'));
-    for(var i = 0; i < this.num_columns; i++)
-      this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
-    for(var i = 0; i < this.num_rows; i++)
-      this.rows.push((this.cellHeight + this.row_gutter) * i + midY + offsetY);
+    // preset grid dimension inputs
+    this.presetDimensionInputs();
 
-    // min / max values for easy access
-    this.minX = this.columns[0];
-    this.minY = this.rows[0];
-    this.maxX = this.columns[this.columns.length-1];
-    this.maxY = this.rows[this.rows.length-1];
-
-    // start listeners
+    // start event listeners
     this.domContainer.mousedown(this.start_new_box);
     $('#bg_upload').on('change', function(){
       grid_demo.set_bg_image(this);
     });
+    $('.bg_dimension').on('change', function(){
+      grid_demo.set_bg_dimension(this.id.split('_')[1], this.value);
+    });
+    $('.grid_dimension').on('change', this.changeGridDimension);
   }
 }
 
