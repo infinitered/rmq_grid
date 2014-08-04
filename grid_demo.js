@@ -174,18 +174,8 @@ var grid_demo = {
 
       // create the mirror box to display the code
       var domCodeBox = domNew.clone();
-      var objPosition = domNew.position();
-      var objGridPosition = grid_demo.domContainer.position();
-      var objTargetPosition = grid_demo.domTarget.position();
-      var offsetPadding = 16;
-
-      domCodeBox.css({
-        'top': objPosition.top - objGridPosition.top + objTargetPosition.top,
-        'left': objPosition.left - objGridPosition.left + objTargetPosition.left,
-        'width': domNew.width() - offsetPadding,
-        'height': domNew.height() - offsetPadding
-      }).removeClass('layout_item').addClass('layout_code');
-      domCodeBox.appendTo(grid_demo.domTarget);
+      grid_demo.position_codebox(domNew, domCodeBox);
+      domCodeBox.removeClass('layout_item').addClass('layout_code').appendTo(grid_demo.domTarget);
 
       // get the code text itself
       var grid_points = grid_demo.get_grid_points(domNew);
@@ -281,6 +271,26 @@ var grid_demo = {
      */
     grid_demo.domContainer.on('mouseleave', finish_new_box);
 
+  },
+
+  /**
+   * Position codebox based on sister gridbox
+   *
+   * @param domGridBox
+   * @param domCodeBox
+   */
+  position_codebox: function(domGridBox, domCodeBox){
+    var objPosition = domGridBox.position();
+    var objGridPosition = this.domContainer.position();
+    var objTargetPosition = this.domTarget.position();
+    var offsetPadding = 16;
+
+    domCodeBox.css({
+      'top': objPosition.top - objGridPosition.top + objTargetPosition.top,
+      'left': objPosition.left - objGridPosition.left + objTargetPosition.left,
+      'width': domGridBox.width() - offsetPadding,
+      'height': domGridBox.height() - offsetPadding
+    });
   },
 
   /**
@@ -571,14 +581,15 @@ var grid_demo = {
         var css_width = grid_demo.get_edge_from_midpoint(
           grid_demo.columns[grid_demo.get_gridpoint_index(grid_points.end, true)], true, false) - css_left;
         var css_height = grid_demo.get_edge_from_midpoint(
-          grid_demo.rows[grid_demo.get_gridpoint_index(grid_points.start, false)], false, false) - css_top;
+          grid_demo.rows[grid_demo.get_gridpoint_index(grid_points.end, false)], false, false) - css_top;
       
         // position grid box
         sister.css({'top': css_top, 'left': css_left, 'width': css_width, 'height': css_height});
-
+        grid_demo.position_codebox(sister, codebox);
       }
+
+      // valid gridpoints have been removed, destroy the box
       else{
-        // destroy box
       }
     });
 
