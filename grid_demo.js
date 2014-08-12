@@ -64,6 +64,12 @@ var grid_demo = {
         if(file.match(/^data:image\//)){
           $('.grid_container').css('background-image', 'url(' + event.target.result + ')');
           $('#bg_image_controls').css('display', 'block');
+
+          // default the background image dimensions to fit the grid
+          grid_demo.set_bg_dimension('left', 0);
+          grid_demo.set_bg_dimension('top', 0);
+          grid_demo.set_bg_dimension('width', 100);
+          grid_demo.set_bg_dimension('height', 100);
         }
       }
       reader.readAsDataURL(input.files[0]);
@@ -77,14 +83,27 @@ var grid_demo = {
    * @param value
    */
   set_bg_dimension: function(dimension, value){
+    value = parseInt(value);
     if(dimension == 'top' || dimension == 'left'){
       var css_dimension = 'background-position';
-      value += 'px';
+      value = parseInt(value) + this.label_offset;
+      if(dimension == 'top')
+        value += this.row_gutter;
     }
     else{
       var css_dimension = 'background-size';
-      value += '%';
+
+      // convert percentage to pixel value so we can do calculations with it
+      if(dimension == 'width')
+        var container_dimension = this.domContainer.width() - 
+          this.column_gutter - this.label_offset;
+      else
+        var container_dimension = this.domContainer.height() - 
+            this.row_gutter - this.label_offset;
+
+      value = value * .01 * container_dimension;
     }
+    value += 'px';
     var old = $('.grid_container').css(css_dimension).split(' ');
 
     if(dimension == 'left' || dimension == 'width')
@@ -677,13 +696,13 @@ var grid_demo = {
 $(document).ready(function(){
   var dimensions = {
     num_columns: 10,
-    num_rows: 22,
-    column_gutter: 2,
-    row_gutter: 2,
-    content_left_margin: 40,
-    content_right_margin: 40,
-    content_top_margin: 40,
-    content_bottom_margin: 40
+    num_rows: 12,
+    column_gutter: 8,
+    row_gutter: 8,
+    content_left_margin: 0,
+    content_right_margin: 0,
+    content_top_margin: 0,
+    content_bottom_margin: 0
   }
   grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
   $(document).tooltip();

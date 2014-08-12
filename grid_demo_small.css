@@ -6,7 +6,6 @@
   -ms-user-select: none;
   user-select: none;
   cursor: default;
-  border-collapse: collapse;
 }
 
 .grid_label_top{
@@ -86,7 +85,8 @@
   box-sizing: border-box;
   float: left;
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: 340px 594px;
+  background-position: 20px 20px;
 }
 .num_input{
   width: 40px;
