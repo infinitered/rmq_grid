@@ -440,7 +440,7 @@ var grid_demo = {
     $('<div></div>')
       .addClass('grid_label grid_label_corner')
       .css({
-        'margin-right': this.content_left_margin, 
+        'margin-right': this.content_left_margin + this.column_gutter, 
         'margin-bottom': this.content_top_margin
       })
       .appendTo(domHeadRow);
@@ -464,7 +464,7 @@ var grid_demo = {
         .css({'margin-bottom': this.row_gutter, 'height': this.cellHeight});
       $('<div></div>')
         .addClass('grid_label grid_label_left')
-        .css({'margin-right': this.content_left_margin})
+        .css({'margin-right': this.content_left_margin + this.column_gutter})
         .text(i).appendTo(domRow);
       for(var j = 0; j< this.num_columns; j++)
         $('<div></div>').addClass('grid_cell')
@@ -506,7 +506,7 @@ var grid_demo = {
   /**
    * Set the column related parameters
    *
-   * @param dimensiosn
+   * @param dimensions
    */
   setColumns: function(dimensions){
     this.setDimension('num_columns', dimensions);
@@ -515,13 +515,14 @@ var grid_demo = {
     this.setDimension('content_right_margin', dimensions);
     
     var container_width = this.domContainer.width() - this.label_offset
-      - this.content_left_margin - this.content_right_margin; 
+      - this.content_left_margin - this.content_right_margin - this.column_gutter * 2; 
     this.cellWidth = container_width / this.num_columns - this.column_gutter;
 
     // store grid column midpoints for position caclulations
     var midX = this.cellWidth / 2;
     var offsetX = this.domContainer.position().left + this.label_offset +
-      this.content_left_margin + parseInt(this.domContainer.css('padding-left'));
+      this.content_left_margin + parseInt(this.domContainer.css('padding-left')) +
+      this.column_gutter;
     this.columns = [];
     for(var i = 0; i < this.num_columns; i++)
       this.columns.push((this.cellWidth + this.column_gutter) * i + midX + offsetX);
@@ -696,7 +697,7 @@ var grid_demo = {
 $(document).ready(function(){
   var dimensions = {
     num_columns: 10,
-    num_rows: 12,
+    num_rows: 18,
     column_gutter: 8,
     row_gutter: 8,
     content_left_margin: 0,
