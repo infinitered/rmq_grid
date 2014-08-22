@@ -1,3 +1,13 @@
+
+#controls	{ display: block; float: left; width: 317px; margin-left: 20px; margin-top: 29px; }
+#logo		{ background-image: url(http://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/05/rmq_logo_header.png); 
+			  width: 208px; height: 100px; margin: 20px 60px 10px -14px; display: block; }
+
+h2			{ font-size: 18px; display: block; }
+h4			{ font-size: 16px; }
+
+ul			{ font-size: 13px; }
+
 .grid_builder{
   font-size: 12px;
   font-family: monospace;
@@ -94,6 +104,4 @@
 .inactive{
   display: none;
 }
-.control_container{
-  float: left;
-}
+.control_container{ margin-bottom: 10px; }
