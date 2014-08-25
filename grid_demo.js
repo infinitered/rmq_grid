@@ -5,16 +5,6 @@ var grid_demo = {
   domContainer: null,
   domTarget: null,
 
-  // user settable values
-  num_columns: 10,
-  num_rows: 13,
-  column_gutter: 10,
-  row_gutter: 10,
-  content_left_margin: 0,
-  content_right_margin: 0,
-  content_top_margin: 0,
-  content_bottom_margin: 0,
-
   // class will set these values automatically
   // don't mess with them
   label_offset: 20,
@@ -95,10 +85,10 @@ var grid_demo = {
 
       // convert percentage to pixel value so we can do calculations with it
       if(dimension == 'width')
-        var container_dimension = this.domContainer.width() - 
+        var container_dimension = this.domContainer.width() -
           this.column_gutter - this.label_offset;
       else
-        var container_dimension = this.domContainer.height() - 
+        var container_dimension = this.domContainer.height() -
             this.row_gutter - this.label_offset;
 
       value = value * .01 * container_dimension;
@@ -247,7 +237,7 @@ var grid_demo = {
 
     /**
      * Delete with confirmation prompt
-     * 
+     *
      * @param domElement
      */
     var attempt_delete = function(element){
@@ -286,7 +276,7 @@ var grid_demo = {
    * @param domBox
    */
   delete_box: function(domBox){
-    var domSister = domBox.data('sister'); 
+    var domSister = domBox.data('sister');
     if(domSister)
       domSister.fadeOut();
     domBox.fadeOut();
@@ -440,7 +430,7 @@ var grid_demo = {
     $('<div></div>')
       .addClass('grid_label grid_label_corner')
       .css({
-        'margin-right': this.content_left_margin + this.column_gutter, 
+        'margin-right': this.content_left_margin + this.column_gutter,
         'margin-bottom': this.content_top_margin
       })
       .appendTo(domHeadRow);
@@ -451,7 +441,7 @@ var grid_demo = {
         .addClass('grid_label grid_label_top')
         .text(this.num_to_alpha(i))
         .css({
-          'width': this.cellWidth, 
+          'width': this.cellWidth,
           'margin-right': this.column_gutter,
           'margin-bottom': this.content_top_margin
         })
@@ -469,7 +459,7 @@ var grid_demo = {
       for(var j = 0; j< this.num_columns; j++)
         $('<div></div>').addClass('grid_cell')
           .css({
-            'width': this.cellWidth, 
+            'width': this.cellWidth,
             'padding-top': this.cell_padding,
             'margin-right': this.column_gutter
           })
@@ -513,9 +503,9 @@ var grid_demo = {
     this.setDimension('column_gutter', dimensions);
     this.setDimension('content_left_margin', dimensions);
     this.setDimension('content_right_margin', dimensions);
-    
+
     var container_width = this.domContainer.width() - this.label_offset
-      - this.content_left_margin - this.content_right_margin - this.column_gutter * 2; 
+      - this.content_left_margin - this.content_right_margin - this.column_gutter * 2;
     this.cellWidth = container_width / this.num_columns - this.column_gutter;
 
     // store grid column midpoints for position caclulations
@@ -540,14 +530,14 @@ var grid_demo = {
     this.setDimension('row_gutter', dimensions);
     this.setDimension('content_top_margin', dimensions);
     this.setDimension('content_bottom_margin', dimensions);
-    
+
     var container_height = this.domContainer.height() - this.label_offset
       - this.content_top_margin - this.content_bottom_margin;
     this.cellHeight = container_height / this.num_rows - this.row_gutter;
 
     // store row midpoints to use in position calculations
     var midY = this.cellHeight / 2;
-    var offsetY = this.domContainer.position().top + this.label_offset + 
+    var offsetY = this.domContainer.position().top + this.label_offset +
       this.content_top_margin + parseInt(this.domContainer.css('padding-top'));
     this.rows = [];
     for(var i = 0; i < this.num_rows; i++)
@@ -575,7 +565,7 @@ var grid_demo = {
    * Does a midpoint exist
    *
    * @param midpoint (string)
-   * 
+   *
    * @return boolean
    */
   gridpoint_exists: function(gridpoint){
@@ -602,7 +592,7 @@ var grid_demo = {
           grid_demo.columns[grid_demo.get_gridpoint_index(grid_points.end, true)], true, false) - css_left;
         var css_height = grid_demo.get_edge_from_midpoint(
           grid_demo.rows[grid_demo.get_gridpoint_index(grid_points.end, false)], false, false) - css_top;
-      
+
         // position grid box
         sister.css({'top': css_top, 'left': css_left, 'width': css_width, 'height': css_height});
         grid_demo.position_codebox(sister, codebox);
@@ -632,10 +622,10 @@ var grid_demo = {
           grid_demo.setColumns(dimensions);
           break;
 
-        case 'num_rows': 
-        case 'row_gutter': 
-        case 'content_top_margin': 
-        case 'content_bottom_margin': 
+        case 'num_rows':
+        case 'row_gutter':
+        case 'content_top_margin':
+        case 'content_bottom_margin':
           grid_demo.setRows(dimensions);
           break;
     }
@@ -653,8 +643,8 @@ var grid_demo = {
   presetDimensionInputs: function(){
     var inputs = ['num_columns', 'column_gutter',
       'content_left_margin', 'content_right_margin',
-      'num_rows', 'row_gutter', 'content_top_margin', 
-      'content_bottom_margin']; 
+      'num_rows', 'row_gutter', 'content_top_margin',
+      'content_bottom_margin'];
     for(var i = 0; i < inputs.length; i++)
       $('#' + inputs[i])[0].value = this[inputs[i]];
   },
@@ -675,7 +665,7 @@ var grid_demo = {
     // set grid dimensions
     this.setColumns(dimensions);
     this.setRows(dimensions);
-    
+
     // build the grid
     this.domGrid = this.build_grid(this.domContainer);
 
@@ -696,16 +686,21 @@ var grid_demo = {
 
 $(document).ready(function(){
   var dimensions = {
-    num_columns: 10,
+    num_columns: 12,
     num_rows: 18,
-    column_gutter: 8,
-    row_gutter: 8,
+    column_gutter: 10,
+    row_gutter: 10,
     content_left_margin: 0,
     content_right_margin: 0,
-    content_top_margin: 0,
+    content_top_margin: 74,
     content_bottom_margin: 0
   }
   grid_demo.init_grid($('#demo_grid'), $('#demo_code'), dimensions);
+
+  grid_demo.set_bg_dimension('left', 0);
+  grid_demo.set_bg_dimension('top', 0);
+  grid_demo.set_bg_dimension('width', 100);
+  grid_demo.set_bg_dimension('height', 100);
   $(document).tooltip();
 });
 
