@@ -1,6 +1,6 @@
 
 #controls	{ display: block; float: left; width: 317px; margin-left: 20px; margin-top: 29px; }
-#logo		{ background-image: url(http://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/05/rmq_logo_header.png); 
+#logo		{ background-image: url(http://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/05/rmq_logo_header.png);
 			  width: 208px; height: 100px; margin: 20px 60px 10px -14px; display: block; }
 
 h2			{ font-size: 18px; display: block; }
@@ -97,6 +97,7 @@ ul			{ font-size: 13px; }
   background-repeat: no-repeat;
   background-size: 340px 594px;
   background-position: 20px 20px;
+  background-image: url('img/default_background_image.png');
 }
 .num_input{
   width: 40px;
