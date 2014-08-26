@@ -1,18 +1,74 @@
 <html>
   <head>
     <title>RMQ Grid Playground</title>
+    <link rel="stylesheet" href="grid_demo_small.css"/>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/cupertino/jquery-ui.min.css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="grid_demo.js"></script>
   </head>
   <body>
-    <img src="http://ir_wp.s3.amazonaws.com/wp-content/uploads/sites/19/2014/05/rmq_logo_header.png" style="float: left;padding: 10px 365px 5px 10px;">
-    <h2 style="padding-top: 10px;">RMQ Grid Playground</h2>
-    <ul style="font-family: verdana;">
-      <li>Click and Drag on grid to create.</li>
-      <ul>Delete a frame
+    <div style="clear: left;"></div>
+    <div>
+      <div id="demo_code" class="grid_container"></div>
+      <div id="demo_grid" class="grid_container"></div>
+    </div>
+    <div id="controls">
+      <div class="control_container">
+        <label for="bg_upload">Add Background Image:</label>
+        <input type="file" id="bg_upload"/>
+        <div id="bg_image_controls" class="inactive">
+          <input type="number" id="bg_left" min="0" value="0" class="bg_dimension num_input"/>
+          <label for="bg_leftx">Background Left Position:</label>
+          <br/>
+          <input type="number" id="bg_top" min="0" value="0" class="bg_dimension num_input"/>
+          <label for="bg_top">Background Top Position:</label>
+          <br/>
+          <input type="number" id="bg_width" min="0" value="100" class="bg_dimension num_input"/>
+          <label for="bg_width">Background Width (%):</label>
+          <br/>
+          <input type="number" id="bg_height" min="0" value="100" class="bg_dimension num_input"/>
+          <label for="bg_height">Background Height (%):</label>
+          <br/>
+        </div>
+      </div>
+      <div class="control_container">
+        <input type="number" id="num_columns" class="grid_dimension num_input" min="1" max="40"/>
+        <label for="num_columns">Number of Columns</label>
+        <br/>
+        <input type="number" id="num_rows" class="grid_dimension num_input" min="1" max="40"/>
+        <label for="num_rows">Number of Rows</label>
+        <br/>
+        <input type="number" id="column_gutter" class="grid_dimension num_input" min="1" max="40"/>
+        <label for="column_gutter">Column Gutter</label>
+        <br/>
+        <input type="number" id="row_gutter" class="grid_dimension num_input" min="0" max="40"/>
+        <label for="row_gutter">Row Gutter</label>
+        <br/>
+        <input type="number" id="content_left_margin" class="grid_dimension num_input" min="0" max="100"/>
+        <label for="content_left_margin">Left Margin</label>
+        <br/>
+        <input type="number" id="content_right_margin" class="grid_dimension num_input" min="0" max="100"/>
+        <label for="content_right_margin">Right Margin</label>
+        <br/>
+        <input type="number" id="content_top_margin" class="grid_dimension num_input" min="0" max="100"/>
+        <label for="content_top_margin">Top Margin</label>
+        <br/>
+        <input type="number" id="content_bottom_margin" class="grid_dimension num_input" min="0" max="100"/>
+        <label for="content_bottom_margin">Bottom Margin</label>
+        <br/>
+      </div>
+
+      <a href="http://rubymotionquery.com" id="logo"></a>
+      <h2 style="padding-top: 10px;">RMQ Grid Playground</h2>
+
+      <ul style="font-family: verdana;">
+        <li>Click and Drag on grid to create.</li>
         <li>Click on a non-grid frame for confirmation delete.</li>
         <li>Double Click on a non-grid frame to quickly delete.</li>
+        <li><a href="http://rubymotionquery.com/document/grid/">For more info, read the docs here</a>  </li>
       </ul>
-    </ul>
-    <div style="clear: left;"></div>
-    <iframe src="grid.html" style="border: 0px; width: 100%; height: 100%;"></iframe>
+    </div>
+    <div id="dialog-confirm" title="Remove Selected Frame?"></div>
   </body>
 </html>
