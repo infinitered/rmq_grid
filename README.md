@@ -10,3 +10,7 @@ Enjoy use of it on the Github Page here: [http://infinitered.github.io/rmq_grid/
 Click and drag on the grid to build your frames.
 
 Click non-grid frame to delete.
+
+## Premium Support
+
+[RMQ](https://github.com/infinitered/rmq) and [rmq_grid](https://github.com/infinitered/rmq_grid), as open source projects, are free to use and always will be. [Infinite Red](https://infinite.red/) offers premium RMQ and rmq_grid support and general mobile app design/development services. Email us at [hello@infinite.red](mailto:hello@infinite.red) to get in touch with us for more details.
